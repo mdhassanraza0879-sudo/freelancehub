@@ -90,6 +90,7 @@ import Networking from './pages/Networking';
 import Team from './pages/Team';
 import WalletPage from './pages/WalletPage';
 import SupportPage from './pages/SupportPage';
+import AboutFreelanceHub from './pages/AboutFreelanceHub';
 
 const AppRoutes = () => (
   <>
@@ -99,6 +100,7 @@ const AppRoutes = () => (
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/about" element={<AboutFreelanceHub />} />
         <Route path="/jobs" element={<JobBoard />} />
         <Route path="/jobs/:id" element={<JobDetail />} />
         <Route path="/companies" element={<CompanyDirectory />} />

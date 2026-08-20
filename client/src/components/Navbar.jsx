@@ -25,7 +25,8 @@ const Navbar = () => {
 
         {/* Desktop Nav */}
         <div className="navbar-links">
-          <Link to="/companies" className="nav-link nav-link--highlight">🏢 1,000 Companies</Link>
+          <Link to="/about" className="nav-link nav-link--highlight">✨ About FreelanceHub</Link>
+          <Link to="/companies" className="nav-link">🏢 1,000 Companies</Link>
           <Link to="/jobs" className="nav-link">Find Work</Link>
           <Link to="/team" className="nav-link">👥 Team</Link>
           <Link to="/connect" className="nav-link">🤝 Networking</Link>
