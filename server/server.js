@@ -26,6 +26,11 @@ app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/support', require('./routes/support'));
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
+app.get('/google05b0fa64d515e42b.html', (req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.send('google-site-verification: google05b0fa64d515e42b.html');
+});
+
 app.get('/', (req, res) => {
   res.json({ message: '🚀 FreelanceHub API is running!', status: 'OK' });
 });
