@@ -1,6 +1,6 @@
-import { Mail, Phone, ShieldCheck, Award, Users, CheckCircle2, Building2 } from 'lucide-react';
+import { Mail, Phone, CheckCircle2, Users } from 'lucide-react';
 
-const TEAM_MEMBERS = [
+const LEADERSHIP_MEMBERS = [
   {
     role: 'Founder & Chief Architect',
     name: 'Mohammad Hassan Raza',
@@ -8,10 +8,10 @@ const TEAM_MEMBERS = [
     contactValue: 'MdHassanRaza0879@gmail.com',
     avatar: 'M',
     color: 'from-indigo-500 to-purple-600',
-    bio: 'Lead Architect & Founder of FreelanceHub. Overseeing Pan-India scaling, WFH platform expansion, and strict security protocols.'
+    bio: 'Founder & Lead Architect of FreelanceHub. Overseeing Pan-India scaling, WFH platform expansion, and strict security protocols.'
   },
   {
-    role: 'Teammate & Operations Lead',
+    role: 'Operations & Enterprise Partnerships Lead',
     name: 'Dilshad Ahmad',
     contactType: 'phone',
     contactValue: '8657869608',
@@ -20,7 +20,7 @@ const TEAM_MEMBERS = [
     bio: 'Head of Client Onboarding and Pan-India Enterprise Partnerships across WFH technology domains.'
   },
   {
-    role: 'Teammate & Support Manager',
+    role: 'Technical Support & Verification Lead',
     name: 'Barkat Ali',
     contactType: 'phone',
     contactValue: '7905360188',
@@ -39,16 +39,16 @@ const Team = () => {
           <div className="hero-badge">
             <Users size={16} className="inline mr-1 text-indigo-400" /> Pan-India Leadership Team
           </div>
-          <h1>Meet the FreelanceHub Leadership Team</h1>
+          <h1>FreelanceHub Leadership & Management</h1>
           <p>
             Dedicated to providing Pan-India Work from Home (WFH) opportunities, 100% user privacy,
             wallet payout security, and 24/7 customer support.
           </p>
         </div>
 
-        {/* Team Grid */}
+        {/* Leadership Grid */}
         <div className="team-cards-grid animate-fade-in-up">
-          {TEAM_MEMBERS.map((member) => (
+          {LEADERSHIP_MEMBERS.map((member) => (
             <div key={member.name} className="team-card">
               <div className="team-avatar-box">
                 <div className={`team-avatar bg-gradient-to-br ${member.color}`}>
@@ -101,7 +101,7 @@ const Team = () => {
             </div>
             <div className="vision-stat">
               <strong>24/7</strong>
-              <span>Live Team Support</span>
+              <span>Live Support</span>
             </div>
           </div>
         </div>
