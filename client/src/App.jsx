@@ -85,6 +85,9 @@ const FreelancersPage = () => {
   );
 };
 
+import CompanyDirectory from './pages/CompanyDirectory';
+import Networking from './pages/Networking';
+
 const AppRoutes = () => (
   <>
     <Navbar />
@@ -95,6 +98,8 @@ const AppRoutes = () => (
         <Route path="/register" element={<Register />} />
         <Route path="/jobs" element={<JobBoard />} />
         <Route path="/jobs/:id" element={<JobDetail />} />
+        <Route path="/companies" element={<CompanyDirectory />} />
+        <Route path="/connect" element={<Networking />} />
         <Route path="/freelancers" element={<FreelancersPage />} />
         <Route path="/freelancers/:username" element={<FreelancerProfile />} />
         <Route path="/post-job" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />

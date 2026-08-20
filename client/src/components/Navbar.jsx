@@ -25,9 +25,11 @@ const Navbar = () => {
 
         {/* Desktop Nav */}
         <div className="navbar-links">
+          <Link to="/companies" className="nav-link nav-link--highlight">🏢 1,000 Companies</Link>
           <Link to="/jobs" className="nav-link">Find Work</Link>
+          <Link to="/connect" className="nav-link">🤝 Networking</Link>
           <Link to="/freelancers" className="nav-link">Find Talent</Link>
-          <Link to="/pricing" className="nav-link nav-link--highlight">💎 Pricing</Link>
+          <Link to="/pricing" className="nav-link">💎 Pricing</Link>
           {user ? (
             <>
               <Link to="/dashboard" className="nav-link">Dashboard</Link>

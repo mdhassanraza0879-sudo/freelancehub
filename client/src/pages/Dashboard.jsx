@@ -16,12 +16,16 @@ import {
   Sparkles,
   ShieldCheck,
   Zap,
-  DollarSign,
   ArrowUpRight,
   UserCheck,
-  Award,
+  Building2,
   Layers,
-  ArrowRight
+  ArrowRight,
+  DollarSign,
+  Copy,
+  Users,
+  Share2,
+  CreditCard
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -39,6 +43,7 @@ const Dashboard = () => {
   const [myJobs, setMyJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [copiedLink, setCopiedLink] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +77,16 @@ const Dashboard = () => {
       </div>
     );
   }
+
+  const origin = window.location.origin;
+  const personalNetworkingLink = `${origin}/connect?ref=${user?._id || 'demo_user'}`;
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(personalNetworkingLink);
+    setCopiedLink(true);
+    toast.success('🎉 Generated Mutual Communication Link copied!');
+    setTimeout(() => setCopiedLink(false), 3000);
+  };
 
   const filteredApps =
     activeFilter === 'all'
@@ -160,15 +175,76 @@ const Dashboard = () => {
             <Zap size={18} className="text-indigo-400" />
             <span>Quick Actions:</span>
           </div>
+          <Link to="/companies" className="launchpad-link launchpad-link--featured">
+            🏢 1,000 Real Companies
+          </Link>
+          <Link to="/connect" className="launchpad-link">
+            🤝 Mutual Link Generator
+          </Link>
           <Link to="/jobs" className="launchpad-link">
             🔍 Browse 200+ Jobs
-          </Link>
-          <Link to="/freelancers" className="launchpad-link">
-            👥 Top Freelancers
           </Link>
           <Link to="/pricing" className="launchpad-link launchpad-link--gold">
             💎 Go Premium (From ₹199)
           </Link>
+        </div>
+
+        {/* Generated Mutual Networking Link Widget */}
+        <div className="dashboard-ref-widget animate-fade-in-up">
+          <div className="widget-left">
+            <div className="widget-icon">🔗</div>
+            <div>
+              <h4 className="widget-title">Your Generated Communication & Networking Link</h4>
+              <p className="widget-subtitle">
+                Share this link with clients & freelancers to connect directly and unlock mutual project benefits.
+              </p>
+            </div>
+          </div>
+
+          <div className="widget-action-box">
+            <input type="text" readOnly value={personalNetworkingLink} className="widget-link-input" />
+            <button onClick={handleCopyLink} className="btn btn-primary btn-sm btn-glow">
+              {copiedLink ? <CheckCircle size={14} /> : <Copy size={14} />}
+              {copiedLink ? 'Copied!' : 'Copy Link'}
+            </button>
+            <Link to="/connect" className="btn btn-secondary btn-sm">
+              Open Networking Hub <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+
+        {/* Income Tracker Section */}
+        <div className="dashboard-income-tracker animate-fade-in-up">
+          <div className="tracker-header">
+            <div className="flex-center gap-2">
+              <DollarSign size={22} className="text-emerald-400" />
+              <h3>Income & Revenue Tracker</h3>
+            </div>
+            <span className="income-target-badge">🎯 Monthly Target: ₹2,00,000</span>
+          </div>
+
+          <div className="income-metrics-grid">
+            <div className="income-card">
+              <span className="income-card-label">Total Earned / Allocated</span>
+              <div className="income-card-val text-emerald-400">₹1,45,000</div>
+              <div className="income-progress-bar-bg">
+                <div className="income-progress-fill" style={{ width: '72.5%' }}></div>
+              </div>
+              <span className="income-progress-text">72.5% of Monthly Target Completed</span>
+            </div>
+
+            <div className="income-card">
+              <span className="income-card-label">Pending Payouts</span>
+              <div className="income-card-val text-amber-400">₹35,000</div>
+              <span className="income-card-sub">2 Escrow milestones pending release</span>
+            </div>
+
+            <div className="income-card">
+              <span className="income-card-label">Completed Contracts</span>
+              <div className="income-card-val text-indigo-400">8 Contracts</div>
+              <span className="income-card-sub">Verified payment settlements</span>
+            </div>
+          </div>
         </div>
 
         {/* High-Performance KPI Metric Cards */}
@@ -314,10 +390,10 @@ const Dashboard = () => {
                 </div>
                 <h3 className="empty-title">No proposals in this view</h3>
                 <p className="empty-desc">
-                  Browse over 200+ active freelance jobs and apply today!
+                  Browse over 200+ active freelance jobs or 1,000 real companies!
                 </p>
-                <Link to="/jobs" className="pro-btn-primary mt-4">
-                  Browse 200+ Jobs <ArrowRight size={16} />
+                <Link to="/companies" className="pro-btn-primary mt-4">
+                  Browse 1,000 Real Companies <ArrowRight size={16} />
                 </Link>
               </div>
             ) : (
