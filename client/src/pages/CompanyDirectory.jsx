@@ -17,7 +17,7 @@ import {
   ArrowRight,
   Filter
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import JobReviewModal from '../components/JobReviewModal';
 
 const INDUSTRIES = [
   'All',
@@ -44,7 +44,8 @@ const CompanyDirectory = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(1000);
   const [alertsEnabled, setAlertsEnabled] = useState(false);
-  const [applyingId, setApplyingId] = useState(null);
+  const [selectedJobForReview, setSelectedJobForReview] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchCompaniesData = async () => {
     setLoading(true);
@@ -70,18 +71,29 @@ const CompanyDirectory = () => {
     fetchCompaniesData();
   }, [search, industry, page]);
 
-  const handleApply = async (company) => {
+  const handleOpenReviewModal = (company) => {
     if (!user) {
-      return toast.error('Please sign in to apply directly to companies');
+      return toast.error('Please sign in to review & apply to companies');
     }
-    setApplyingId(company._id);
+    setSelectedJobForReview({
+      _id: company._id,
+      title: `Senior Pan-India WFH Role at ${company.name}`,
+      company: company.name,
+      location: company.location || 'Pan-India Work from Home (WFH)',
+      budgetMin: 18000,
+      budgetMax: 50000,
+      description: company.description || `${company.name} is hiring skilled professionals for Pan-India remote WFH roles. Deliver clean, modular work adhering to client specs.`,
+      skillsRequired: ['React / Full Stack', 'Pan-India WFH', 'UI/UX Design', 'Communication']
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmApplication = async (payload) => {
     try {
-      const { data } = await applyToCompany(company._id);
-      toast.success(data.message || `Application submitted to ${company.name}! 🎉`);
+      const { data } = await applyToCompany(payload.jobId);
+      toast.success(data.message || `Application submitted after requirements review! 🎉`);
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to submit application');
-    } finally {
-      setApplyingId(null);
+      toast.error('Failed to submit application');
     }
   };
 
@@ -263,17 +275,10 @@ const CompanyDirectory = () => {
                   </a>
 
                   <button
-                    onClick={() => handleApply(company)}
-                    disabled={applyingId === company._id}
+                    onClick={() => handleOpenReviewModal(company)}
                     className="btn btn-primary btn-sm btn-glow"
                   >
-                    {applyingId === company._id ? (
-                      <span className="flex-center gap-1">
-                        <Loader2 size={14} className="spin" /> Applying...
-                      </span>
-                    ) : (
-                      <span>Direct Apply <ArrowRight size={14} className="inline ml-1" /></span>
-                    )}
+                    <span>Review & Apply <ArrowRight size={14} className="inline ml-1" /></span>
                   </button>
                 </div>
               </div>
@@ -306,6 +311,14 @@ const CompanyDirectory = () => {
           </div>
         )}
       </div>
+
+      {/* Mandatory Job Requirements Review Modal */}
+      <JobReviewModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        job={selectedJobForReview}
+        onSubmitApplication={handleConfirmApplication}
+      />
     </div>
   );
 };

@@ -22,6 +22,8 @@ app.use('/api/jobs', require('./routes/jobs'));
 app.use('/api/applications', require('./routes/applications'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/companies', require('./routes/companies'));
+app.use('/api/wallet', require('./routes/wallet'));
+app.use('/api/support', require('./routes/support'));
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {

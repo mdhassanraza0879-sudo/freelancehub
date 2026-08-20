@@ -83,12 +83,6 @@ const Login = () => {
     }
   };
 
-  const fillDemo = (email, password) => {
-    setForm({ email, password });
-    setErrors({});
-    toast('Demo credentials filled cleanly!', { icon: '✨' });
-  };
-
   return (
     <div className="auth-page animated-mesh-bg">
       <div className="ambient-blob ambient-blob-1"></div>
@@ -104,31 +98,7 @@ const Login = () => {
         </div>
 
         <h2 className="auth-title">Welcome Back 👋</h2>
-        <p className="auth-subtitle">Sign in to access 1,000 companies & income portal</p>
-
-        {/* Quick Demo Accounts */}
-        <div className="demo-credentials-box">
-          <div className="demo-header">
-            <Zap size={14} className="text-amber-500" />
-            <span>Quick 1-Click Demo Login:</span>
-          </div>
-          <div className="demo-btn-group">
-            <button
-              type="button"
-              className="demo-pill-btn"
-              onClick={() => fillDemo('demo.client@freelancehub.in', 'Demo@12345')}
-            >
-              🏢 Demo Client
-            </button>
-            <button
-              type="button"
-              className="demo-pill-btn"
-              onClick={() => fillDemo('demo.freelancer@freelancehub.in', 'Demo@12345')}
-            >
-              💼 Demo Freelancer
-            </button>
-          </div>
-        </div>
+        <p className="auth-subtitle">Sign in with your real account credentials</p>
 
         <form onSubmit={handleSubmit} className="auth-form" noValidate>
           {/* Email Field */}

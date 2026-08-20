@@ -87,6 +87,9 @@ const FreelancersPage = () => {
 
 import CompanyDirectory from './pages/CompanyDirectory';
 import Networking from './pages/Networking';
+import Team from './pages/Team';
+import WalletPage from './pages/WalletPage';
+import SupportPage from './pages/SupportPage';
 
 const AppRoutes = () => (
   <>
@@ -99,11 +102,14 @@ const AppRoutes = () => (
         <Route path="/jobs" element={<JobBoard />} />
         <Route path="/jobs/:id" element={<JobDetail />} />
         <Route path="/companies" element={<CompanyDirectory />} />
+        <Route path="/team" element={<Team />} />
         <Route path="/connect" element={<Networking />} />
         <Route path="/freelancers" element={<FreelancersPage />} />
         <Route path="/freelancers/:username" element={<FreelancerProfile />} />
         <Route path="/post-job" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/wallet" element={<ProtectedRoute><WalletPage /></ProtectedRoute>} />
+        <Route path="/support" element={<ProtectedRoute><SupportPage /></ProtectedRoute>} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
         <Route path="/jobs/:id/applicants" element={<ProtectedRoute><Applicants /></ProtectedRoute>} />

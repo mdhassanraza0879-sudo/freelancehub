@@ -38,26 +38,24 @@ const STATS = [
 const Home = () => {
   return (
     <div className="home">
-      {/* ── Founder & Contact Intro Bar ───────────────────────────────── */}
+      {/* ── Founder & Team Contact Intro Bar ───────────────────────────────── */}
       <div className="founder-intro-bar">
         <div className="founder-info-left">
           <div className="founder-badge">
             <Award size={16} className="text-amber-400" />
-            <span>Platform Created & Founded by <strong>MD Hassan Raza</strong></span>
+            <span>Founded by <strong>Mohammad Hassan Raza</strong> • Pan-India WFH Platform</span>
           </div>
-          <p className="founder-tagline">
-            Empowering freelancers & clients with 1,000+ real companies, direct networking, and zero commission.
-          </p>
         </div>
 
         <div className="founder-contact-box">
-          <a href="mailto:mdhassanraza0879@gmail.com" className="contact-pill mail-pill">
-            <Mail size={15} />
-            <span>mdhassanraza0879@gmail.com</span>
+          <a href="mailto:MdHassanRaza0879@gmail.com" className="contact-pill mail-pill">
+            <Mail size={13} /> Hassan (Founder): MdHassanRaza0879@gmail.com
           </a>
-          <a href="tel:+919876543210" className="contact-pill phone-pill">
-            <Phone size={15} />
-            <span>+91 98765 43210</span>
+          <a href="tel:8657869608" className="contact-pill phone-pill">
+            <Phone size={13} /> Dilshad Ahmad: 8657869608
+          </a>
+          <a href="tel:7905360188" className="contact-pill phone-pill">
+            <Phone size={13} /> Barkat Ali: 7905360188
           </a>
         </div>
       </div>
