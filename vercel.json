@@ -19,6 +19,18 @@
       "dest": "server/server.js"
     },
     {
+      "src": "/google05b0fa64d515e42b.html",
+      "dest": "client/google05b0fa64d515e42b.html"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "client/sitemap.xml"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "client/robots.txt"
+    },
+    {
       "handle": "filesystem"
     },
     {
