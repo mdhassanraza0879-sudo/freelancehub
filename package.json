@@ -1,0 +1,19 @@
+{
+  "name": "freelancehub",
+  "version": "1.0.0",
+  "description": "FreelanceHub — Pan-India Work From Home Platform",
+  "main": "server/server.js",
+  "private": true,
+  "scripts": {
+    "build": "cd client && npm install && npm run build",
+    "start": "node server/server.js",
+    "dev": "cd client && npm run dev"
+  },
+  "keywords": [
+    "freelancehub",
+    "work-from-home",
+    "wfh-jobs"
+  ],
+  "author": "Mohammad Hassan Raza",
+  "license": "ISC"
+}
