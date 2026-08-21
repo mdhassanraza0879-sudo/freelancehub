@@ -1,41 +1,20 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "server/server.js",
-      "use": "@vercel/node"
+      "source": "/api/:path*",
+      "destination": "/server/server.js"
     },
     {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "server/server.js"
+      "source": "/google05b0fa64d515e42b.html",
+      "destination": "/google05b0fa64d515e42b.html"
     },
     {
-      "src": "/google05b0fa64d515e42b.html",
-      "dest": "client/google05b0fa64d515e42b.html"
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
     },
     {
-      "src": "/sitemap.xml",
-      "dest": "client/sitemap.xml"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "client/robots.txt"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "client/$1"
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
     }
   ]
 }
