@@ -49,13 +49,19 @@ const Home = () => {
 
         <div className="founder-contact-box">
           <a href="mailto:MdHassanRaza0879@gmail.com" className="contact-pill mail-pill">
-            <Mail size={13} /> Hassan (Founder): MdHassanRaza0879@gmail.com
+            <Mail size={13} /> MdHassanRaza0879@gmail.com
+          </a>
+          <a href="https://www.linkedin.com/in/mdhassanraza0879" target="_blank" rel="noreferrer" className="contact-pill linkedin-pill">
+            💼 LinkedIn
+          </a>
+          <a href="https://github.com/mdhassanraza0879-sudo" target="_blank" rel="noreferrer" className="contact-pill github-pill">
+            💻 GitHub
           </a>
           <a href="tel:8657869608" className="contact-pill phone-pill">
-            <Phone size={13} /> Dilshad Ahmad: 8657869608
+            <Phone size={13} /> Dilshad: 8657869608
           </a>
           <a href="tel:7905360188" className="contact-pill phone-pill">
-            <Phone size={13} /> Barkat Ali: 7905360188
+            <Phone size={13} /> Barkat: 7905360188
           </a>
         </div>
       </div>
