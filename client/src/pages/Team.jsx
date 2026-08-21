@@ -77,7 +77,7 @@ const Team = () => {
         <div className="founder-spotlight-card animate-fade-in-up mb-8">
           <div className="founder-avatar-wrap">
             <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
+              src="/hassan_raza_founder.jpg"
               alt="Mohammad Hassan Raza"
               className="founder-dp-img"
             />

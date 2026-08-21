@@ -1629,8 +1629,19 @@ textarea { resize: vertical; }
   flex-wrap: wrap;
 }
 
+.founder-mini-dp {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #6366f1;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
 .founder-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   background: rgba(245, 158, 11, 0.15);

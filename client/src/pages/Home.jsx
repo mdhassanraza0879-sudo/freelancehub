@@ -42,7 +42,7 @@ const Home = () => {
       <div className="founder-intro-bar">
         <div className="founder-info-left">
           <div className="founder-badge">
-            <Award size={16} className="text-amber-400" />
+            <img src="/hassan_raza_founder.jpg" alt="Mohammad Hassan Raza" className="founder-mini-dp" />
             <span>Founded by <strong>Mohammad Hassan Raza</strong> • Pan-India WFH Platform</span>
           </div>
         </div>
