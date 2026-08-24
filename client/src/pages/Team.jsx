@@ -46,9 +46,9 @@ const FOUNDER_PROJECTS = [
 ];
 
 const Team = () => {
-  const [founderMobile, setFounderMobile] = useState('+91 98765 43210');
+  const [founderMobile, setFounderMobile] = useState('+91 7307670879');
   const [isEditingPhone, setIsEditingPhone] = useState(false);
-  const [newPhone, setNewPhone] = useState('+91 98765 43210');
+  const [newPhone, setNewPhone] = useState('+91 7307670879');
 
   const handleSavePhone = (e) => {
     e.preventDefault();

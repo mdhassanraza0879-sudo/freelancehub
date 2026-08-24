@@ -91,7 +91,7 @@ const Home = () => {
           </div>
 
           <div className="hero-contact-strip">
-            <span>📞 Direct Owner Contact: <strong>+91 98765 43210</strong></span>
+            <span>📞 Direct Owner Contact: <strong>+91 7307670879</strong></span>
             <span>✉️ Support Email: <strong>mdhassanraza0879@gmail.com</strong></span>
           </div>
         </div>
