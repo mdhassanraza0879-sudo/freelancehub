@@ -15,11 +15,13 @@ import EditProfile from './pages/EditProfile';
 import Pricing from './pages/Pricing';
 import './index.css';
 
-// Protected Route wrapper
+// Protected Route wrapper - Enforces strict Login/Signup
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div className="loading-center"><div className="spinner" /></div>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
   return children;
 };
 
@@ -47,7 +49,9 @@ const FreelancersPage = () => {
     }
   };
 
-  useEffect(() => { fetchFreelancers(); }, []);
+  useEffect(() => {
+    fetchFreelancers();
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -55,27 +59,34 @@ const FreelancersPage = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="freelancers-page page-container">
       <div className="page-header">
-        <h1>Find Skilled Freelancers</h1>
-        <p>Browse {freelancers.length}+ professionals ready to work</p>
+        <div className="hero-badge">👥 Top Verified Professionals</div>
+        <h1>Browse Verified Freelancers</h1>
+        <p>Find top developers, designers, and remote experts across India</p>
       </div>
-      <form onSubmit={handleSearch} className="search-bar">
-        <div className="input-icon-wrapper search-input">
-          <Search size={18} className="input-icon" />
-          <input
-            type="text"
-            placeholder="Search by name, skill, or title..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+
+      <form onSubmit={handleSearch} className="search-bar search-bar--lg mb-8">
+        <Search size={20} className="search-icon" />
+        <input
+          type="text"
+          placeholder="Search by skill, name, title..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <button type="submit" className="btn btn-primary">Search</button>
       </form>
+
       {loading ? (
-        <div className="loading-center"><Loader2 size={40} className="spin" /></div>
+        <div className="loading-center">
+          <Loader2 size={32} className="spinner" />
+        </div>
       ) : freelancers.length === 0 ? (
-        <div className="empty-state"><Users size={48} /><h3>No freelancers found</h3></div>
+        <div className="empty-state">
+          <Users size={48} color="#94a3b8" />
+          <h3>No freelancers found</h3>
+          <p>Try searching for a different skill or title</p>
+        </div>
       ) : (
         <div className="freelancers-grid">
           {freelancers.map((f) => <FreelancerCard key={f._id} freelancer={f} />)}
@@ -97,22 +108,25 @@ const AppRoutes = () => (
     <Navbar />
     <main className="main-content">
       <Routes>
+        {/* Public Visitor Informational Pages */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<AboutFreelanceHub />} />
-        <Route path="/jobs" element={<JobBoard />} />
-        <Route path="/jobs/:id" element={<JobDetail />} />
-        <Route path="/companies" element={<CompanyDirectory />} />
         <Route path="/team" element={<Team />} />
-        <Route path="/connect" element={<Networking />} />
-        <Route path="/freelancers" element={<FreelancersPage />} />
-        <Route path="/freelancers/:username" element={<FreelancerProfile />} />
+        <Route path="/pricing" element={<Pricing />} />
+
+        {/* Strictly Protected Authenticated Features (Require Login/Signup) */}
+        <Route path="/jobs" element={<ProtectedRoute><JobBoard /></ProtectedRoute>} />
+        <Route path="/jobs/:id" element={<ProtectedRoute><JobDetail /></ProtectedRoute>} />
+        <Route path="/companies" element={<ProtectedRoute><CompanyDirectory /></ProtectedRoute>} />
+        <Route path="/connect" element={<ProtectedRoute><Networking /></ProtectedRoute>} />
+        <Route path="/freelancers" element={<ProtectedRoute><FreelancersPage /></ProtectedRoute>} />
+        <Route path="/freelancers/:username" element={<ProtectedRoute><FreelancerProfile /></ProtectedRoute>} />
         <Route path="/post-job" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/wallet" element={<ProtectedRoute><WalletPage /></ProtectedRoute>} />
         <Route path="/support" element={<ProtectedRoute><SupportPage /></ProtectedRoute>} />
-        <Route path="/pricing" element={<Pricing />} />
         <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
         <Route path="/jobs/:id/applicants" element={<ProtectedRoute><Applicants /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" replace />} />
@@ -130,7 +144,11 @@ function App() {
           position="top-right"
           toastOptions={{
             duration: 4000,
-            style: { borderRadius: '10px', fontSize: '14px' },
+            style: {
+              background: '#1e293b',
+              color: '#f8fafc',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            },
           }}
         />
       </Router>
