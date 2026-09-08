@@ -42,7 +42,7 @@ const CompanyDirectory = () => {
   const [industry, setIndustry] = useState('All');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(1000);
+  const [totalCount, setTotalCount] = useState(5000);
   const [alertsEnabled, setAlertsEnabled] = useState(false);
   const [selectedJobForReview, setSelectedJobForReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +59,7 @@ const CompanyDirectory = () => {
       const { data } = await getCompanies(params);
       setCompanies(data.data || []);
       setTotalPages(data.pagination?.pages || 1);
-      setTotalCount(data.pagination?.total || 1000);
+      setTotalCount(data.pagination?.total || 5000);
     } catch {
       toast.error('Failed to load companies database');
     } finally {
@@ -98,14 +98,11 @@ const CompanyDirectory = () => {
   };
 
   const toggleAlerts = () => {
-    const nextState = !alertsEnabled;
-    setAlertsEnabled(nextState);
-    if (nextState) {
-      toast.success('🔔 Job Alerts Enabled! You will receive daily matching role alerts.', {
-        duration: 4000
-      });
+    setAlertsEnabled(!alertsEnabled);
+    if (!alertsEnabled) {
+      toast.success('🔔 Instant Job Alerts Enabled! You will receive daily hiring alerts from 5,000+ Indian & International companies.');
     } else {
-      toast('Job Alerts paused', { icon: '🔕' });
+      toast('Job Alerts Paused.');
     }
   };
 
@@ -116,11 +113,11 @@ const CompanyDirectory = () => {
         <div className="companies-hero-header animate-fade-in-up">
           <div className="hero-header-content">
             <div className="hero-badge">
-              <Building2 size={16} className="inline mr-1 text-indigo-400" /> Database of 1,000 Real Companies
+              <Building2 size={16} className="inline mr-1 text-indigo-400" /> Database of 5,000+ Indian & International Companies
             </div>
-            <h1>Search & Apply to 1,000 Top Companies</h1>
+            <h1>Search & Apply to 5,000+ Top Companies</h1>
             <p>
-              Direct applications to verified Indian & global tech giants (Google, Microsoft, TCS, Razorpay, Swiggy, Zomato, Flipkart, etc.).
+              Direct applications to verified Indian & International tech giants (Google, Microsoft, AWS, TCS, Razorpay, Swiggy, Zomato, Flipkart, etc.).
             </p>
           </div>
 
@@ -137,7 +134,7 @@ const CompanyDirectory = () => {
               <div>
                 <h4 className="alerts-title">Instant Job Alerts</h4>
                 <p className="alerts-desc">
-                  {alertsEnabled ? '🟢 Active — Getting 1,000 company alerts' : '🔴 Paused — Click to enable daily notifications'}
+                  {alertsEnabled ? '🟢 Active — Getting 5,000+ company alerts' : '🔴 Paused — Click to enable daily notifications'}
                 </p>
               </div>
             </div>

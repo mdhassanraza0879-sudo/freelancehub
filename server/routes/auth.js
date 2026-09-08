@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 
 // ── Helper: Generate JWT ──────────────────────────────────────────────────────
 const generateToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  jwt.sign({ id }, process.env.JWT_SECRET || 'freelancehub_secret_2026', { expiresIn: '7d' });
 
 // ── POST /api/auth/register ───────────────────────────────────────────────────
 router.post(
@@ -19,44 +18,59 @@ router.post(
       .isLength({ min: 6 })
       .withMessage('Password must be at least 6 characters'),
     body('role')
+      .optional()
       .isIn(['freelancer', 'client'])
       .withMessage('Role must be freelancer or client'),
   ],
   async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({ success: false, errors: errors.array() });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: errors.array()[0]?.msg || 'Validation failed',
+        errors: errors.array()
+      });
+    }
 
-    const { name, email, password, role, username } = req.body;
+    let { name, email, password, role = 'freelancer', username } = req.body;
+    email = email.trim().toLowerCase();
 
     try {
       const existingUser = await User.findOne({ email });
-      if (existingUser)
+      if (existingUser) {
         return res
           .status(400)
-          .json({ success: false, message: 'Email already in use' });
+          .json({ success: false, message: 'Email already registered. Please login.' });
+      }
 
-      // Check username uniqueness for freelancers
-      if (role === 'freelancer' && username) {
-        const existingUsername = await User.findOne({ username: username.toLowerCase() });
-        if (existingUsername)
-          return res
-            .status(400)
-            .json({ success: false, message: 'Username already taken' });
+      // Generate a unique fallback username if not provided or empty
+      let finalUsername = username ? username.trim().toLowerCase() : '';
+      if (!finalUsername) {
+        const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        finalUsername = `${cleanName || 'user'}_${Date.now().toString().slice(-4)}${Math.floor(Math.random() * 100)}`;
+      }
+
+      // Ensure username uniqueness
+      const existingUsername = await User.findOne({ username: finalUsername });
+      if (existingUsername) {
+        finalUsername = `${finalUsername}_${Math.floor(Math.random() * 1000)}`;
       }
 
       const user = await User.create({
-        name,
+        name: name.trim(),
         email,
         password,
-        role,
-        username: role === 'freelancer' ? username?.toLowerCase() : undefined,
+        role: role || 'freelancer',
+        username: finalUsername,
+        isVerified: true,
       });
+
+      const token = generateToken(user._id);
 
       res.status(201).json({
         success: true,
-        message: 'Account created successfully',
-        token: generateToken(user._id),
+        message: 'Account created successfully! Welcome to FreelanceHub.',
+        token,
         user: {
           id: user._id,
           name: user.name,
@@ -66,8 +80,11 @@ router.post(
         },
       });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: 'Server error' });
+      console.error('Registration Error:', err);
+      res.status(500).json({
+        success: false,
+        message: err.message || 'Failed to create account. Please try again.'
+      });
     }
   }
 );
@@ -81,28 +98,38 @@ router.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({ success: false, errors: errors.array() });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: errors.array()[0]?.msg || 'Validation failed',
+        errors: errors.array()
+      });
+    }
 
-    const { email, password } = req.body;
+    const email = req.body.email.trim().toLowerCase();
+    const { password } = req.body;
 
     try {
       const user = await User.findOne({ email }).select('+password');
-      if (!user)
+      if (!user) {
         return res
           .status(401)
-          .json({ success: false, message: 'Invalid credentials' });
+          .json({ success: false, message: 'Invalid email or password' });
+      }
 
       const isMatch = await user.matchPassword(password);
-      if (!isMatch)
+      if (!isMatch) {
         return res
           .status(401)
-          .json({ success: false, message: 'Invalid credentials' });
+          .json({ success: false, message: 'Invalid email or password' });
+      }
+
+      const token = generateToken(user._id);
 
       res.json({
         success: true,
         message: 'Logged in successfully',
-        token: generateToken(user._id),
+        token,
         user: {
           id: user._id,
           name: user.name,
@@ -113,8 +140,8 @@ router.post(
         },
       });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: 'Server error' });
+      console.error('Login Error:', err);
+      res.status(500).json({ success: false, message: 'Server error during login' });
     }
   }
 );

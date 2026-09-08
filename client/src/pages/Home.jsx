@@ -70,20 +70,20 @@ const Home = () => {
       <section className="hero">
         <div className="hero-content">
           <div className="hero-badge">
-            <Sparkles size={14} className="inline mr-1" /> 1,000 Real Companies Hiring Now
+            <Sparkles size={14} className="inline mr-1" /> 5,000+ Indian & International Companies Hiring Now
           </div>
           <h1 className="hero-title">
-            Connect with 1,000+ Real Companies
-            <span className="gradient-text"> & Top Talent</span>
+            Connect with 5,000+ Real Companies
+            <span className="gradient-text"> & Top Global Talent</span>
           </h1>
           <p className="hero-subtitle">
-            Search 1,000 verified global and Indian enterprises (Google, Microsoft, TCS, Razorpay, Swiggy, etc.),
+            Search 5,000 verified Indian & International tech giants (Google, Microsoft, AWS, TCS, Razorpay, Swiggy, Spotify, OpenAI, etc.),
             receive instant Job Alerts, and generate your custom mutual-benefit networking link!
           </p>
 
           <div className="hero-actions">
             <Link to="/companies" className="btn btn-primary btn-lg btn-glow">
-              <Building2 size={20} /> Explore 1,000 Companies
+              <Building2 size={20} /> Explore 5,000 Companies
             </Link>
             <Link to="/jobs" className="btn btn-outline btn-lg">
               Browse 200+ Jobs <ArrowRight size={18} />
