@@ -39,22 +39,17 @@ const Register = () => {
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Strict Field Validation Rules
-  const validateField = (name, value, role = form.role) => {
+  // Forgiving Field Validation Rules
+  const validateField = (name, value) => {
     let err = '';
     if (name === 'name') {
       if (!value.trim()) err = 'Full Name is required';
-      else if (value.trim().length < 3) err = 'Name must be at least 3 characters';
+      else if (value.trim().length < 2) err = 'Name must be at least 2 characters';
     }
     if (name === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!value.trim()) err = 'Email address is required';
-      else if (!emailRegex.test(value)) err = 'Invalid email address format';
-    }
-    if (name === 'username' && role === 'freelancer') {
-      const userRegex = /^[a-zA-Z0-9_]{3,20}$/;
-      if (!value.trim()) err = 'Username is required for freelancers';
-      else if (!userRegex.test(value)) err = 'Username must be 3-20 letters/numbers (no spaces)';
+      else if (!emailRegex.test(value.trim())) err = 'Invalid email address format';
     }
     if (name === 'password') {
       if (!value) err = 'Password is required';
@@ -79,10 +74,14 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    let val = value;
+    if (name === 'username') {
+      val = value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+    }
+    setForm((prev) => ({ ...prev, [name]: val }));
 
     if (touched[name]) {
-      const err = validateField(name, value);
+      const err = validateField(name, val);
       setErrors((prev) => ({ ...prev, [name]: err }));
     }
   };
@@ -99,34 +98,46 @@ const Register = () => {
 
     const nameErr = validateField('name', form.name);
     const emailErr = validateField('email', form.email);
-    const userErr = validateField('username', form.username);
     const passErr = validateField('password', form.password);
 
-    if (nameErr || emailErr || (form.role === 'freelancer' && userErr) || passErr) {
-      setErrors({ name: nameErr, email: emailErr, username: userErr, password: passErr });
-      setTouched({ name: true, email: true, username: true, password: true });
-      return toast.error('Please fix validation errors before proceeding.');
+    if (nameErr || emailErr || passErr) {
+      setErrors({ name: nameErr, email: emailErr, password: passErr });
+      setTouched({ name: true, email: true, password: true });
+      return toast.error(nameErr || emailErr || passErr || 'Please check input fields');
     }
 
     setLoading(true);
     try {
-      const payload = { ...form };
-      if (form.role === 'client') delete payload.username;
+      // Auto-generate username from name if not provided
+      let finalUsername = form.username.trim();
+      if (!finalUsername) {
+        const cleanName = form.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+        finalUsername = `${cleanName || 'user'}_${Math.floor(Math.random() * 8999 + 1000)}`;
+      }
+
+      const payload = {
+        name: form.name.trim(),
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+        role: form.role,
+        username: finalUsername,
+      };
 
       const { data } = await registerUser(payload);
-      login(data.token, data.user);
-      triggerCelebration();
-      toast.success('Account created! Welcome to FreelanceHub 🎉');
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 500);
-    } catch (err) {
-      const serverErrors = err.response?.data?.errors;
-      if (serverErrors?.length) {
-        serverErrors.forEach((e) => toast.error(e.msg));
+      if (data.token && data.user) {
+        login(data.token, data.user);
+        triggerCelebration();
+        toast.success('Account created! Welcome to FreelanceHub 🎉');
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 300);
       } else {
-        toast.error(err.response?.data?.message || 'Registration failed');
+        toast.error(data.message || 'Registration failed');
       }
+    } catch (err) {
+      console.error('Mobile Register Submit Error:', err);
+      const serverMsg = err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || 'Registration failed. Try a different email.';
+      toast.error(serverMsg);
     } finally {
       setLoading(false);
     }
@@ -149,7 +160,7 @@ const Register = () => {
         </div>
 
         <h2 className="auth-title">Create Free Account 🚀</h2>
-        <p className="auth-subtitle">Join 1,000 real companies & income portal</p>
+        <p className="auth-subtitle">Join 5,000+ Indian & International companies</p>
 
         {/* Animated Role Switcher */}
         <div className="animated-role-container">
@@ -166,7 +177,7 @@ const Register = () => {
               )}
             </div>
             <h4 className="role-card-title">I'm a Freelancer</h4>
-            <p className="role-card-desc">Apply to 1,000 companies & track earnings</p>
+            <p className="role-card-desc">Apply to 5,000+ companies & track earnings</p>
           </div>
 
           <div
@@ -210,31 +221,23 @@ const Register = () => {
               )}
             </div>
 
-            {/* Username (for Freelancers) */}
-            {form.role === 'freelancer' && (
-              <div className="form-group animate-slide-down">
-                <label>
-                  Username <span className="label-note">(profile URL)</span>
-                </label>
-                <div className={`input-icon-wrapper animated-input ${errors.username ? 'input-error' : touched.username && !errors.username ? 'input-success' : ''}`}>
-                  <AtSign size={18} className="input-icon" />
-                  <input
-                    type="text"
-                    name="username"
-                    placeholder="rahulsharma"
-                    value={form.username}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required={form.role === 'freelancer'}
-                  />
-                </div>
-                {errors.username && (
-                  <span className="field-error-msg">
-                    <AlertCircle size={13} /> {errors.username}
-                  </span>
-                )}
+            {/* Optional Username */}
+            <div className="form-group animate-slide-down">
+              <label>
+                Username <span className="label-note">(Optional — auto-generated if blank)</span>
+              </label>
+              <div className="input-icon-wrapper animated-input">
+                <AtSign size={18} className="input-icon" />
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="rahulsharma"
+                  value={form.username}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
               </div>
-            )}
+            </div>
           </div>
 
           {/* Email */}
