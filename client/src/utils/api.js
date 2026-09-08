@@ -1,8 +1,19 @@
 import axios from 'axios';
 
+// Dynamically resolve API baseURL based on environment and hostname
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return '/api'; // Relative endpoint for Vercel production and mobile browsers
+  }
+  return 'http://localhost:5000/api'; // Local development fallback
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
-  timeout: 8000,
+  baseURL: getBaseURL(),
+  timeout: 12000,
 });
 
 // Attach JWT token to every request automatically
@@ -12,11 +23,10 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// ── Strict API Interceptor (No Demo Accounts) ─────────────────────────────────
+// Response Interceptor
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Return actual error response for authentication and forms
     return Promise.reject(error);
   }
 );
@@ -57,7 +67,13 @@ export const getWallet = () => API.get('/wallet');
 export const saveBankDetails = (data) => API.post('/wallet/bank-details', data);
 export const withdrawFunds = (data) => API.post('/wallet/withdraw', data);
 
+// ── Payments ─────────────────────────────────────────────────────────────────
+export const createPaymentOrder = (planId) => API.post('/payments/create-order', { planId });
+export const verifyPaymentSignature = (data) => API.post('/payments/verify', data);
+
 // ── 24/7 Customer Support ───────────────────────────────────────────────────
 export const getSupportTickets = () => API.get('/support');
 export const createSupportTicket = (data) => API.post('/support', data);
 export const replySupportTicket = (id, text) => API.post(`/support/${id}/reply`, { text });
+
+export default API;

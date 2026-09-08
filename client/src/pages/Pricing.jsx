@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { CheckCircle, Zap, Crown, Star, ArrowRight, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import { createPaymentOrder, verifyPaymentSignature } from '../utils/api';
 
 const FREELANCER_FEATURES = [
   '💎 Premium badge on profile',
@@ -45,12 +45,7 @@ const Pricing = () => {
     setLoading(planId);
     try {
       // Create Razorpay order
-      const { data } = await axios.post(
-        'http://localhost:5000/api/payments/create-order',
-        { planId },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('fh_token')}` } }
-      );
-
+      const { data } = await createPaymentOrder(planId);
       const { order, plan, key } = data;
 
       // Open Razorpay checkout
@@ -63,11 +58,7 @@ const Pricing = () => {
         order_id: order.id,
         handler: async (response) => {
           try {
-            const verifyRes = await axios.post(
-              'http://localhost:5000/api/payments/verify',
-              { ...response, planId },
-              { headers: { Authorization: `Bearer ${localStorage.getItem('fh_token')}` } }
-            );
+            const verifyRes = await verifyPaymentSignature({ ...response, planId });
             if (verifyRes.data.success) {
               toast.success('🎉 Payment successful! Premium activated!');
               navigate('/dashboard');
